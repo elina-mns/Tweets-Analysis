@@ -7,6 +7,8 @@
 
 import UIKit
 import SwifteriOS
+import CoreML
+import SwiftyJSON
 
 class MainVC: UIViewController {
     
@@ -42,6 +44,8 @@ class MainVC: UIViewController {
     
     let swifter = Swifter(consumerKey: "LTReJyreyyuz4SWjVABuA1WKI", consumerSecret: "ajf107xfd6869heCG8Ptn8iztfFHBWPIxLkFGvsmoEwI7MKZcz")
     
+    let sentimentClassifier = TweetAnalysis()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .purple
@@ -61,12 +65,40 @@ class MainVC: UIViewController {
         textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         //returns a collection of tweets with a specified parameter
-        swifter.searchTweet(using: "@Spotify", lang: "en", count: 100, tweetMode: .extended) { (results, metadata) in
-            print(results)
+        swifter.searchTweet(using: "@Dior", lang: "en", count: 100, tweetMode: .extended) { (results, metadata) in
+            var tweets = [TweetAnalysisInput]()
+            
+            //adding tweets on a specified parameter to an array
+            for i in 0..<100 {
+                if let tweet = results[i]["full_text"].string {
+                    let tweetForClassification = TweetAnalysisInput(text: tweet)
+                    tweets.append(tweetForClassification)
+                }
+            }
+            
+            //calculation of tweets' score
+            do {
+                let predictions = try self.sentimentClassifier.predictions(inputs: tweets)
+                var sentimentScore = 0
+                for prediction in predictions {
+                    let sentiment = prediction.label
+                    if sentiment == "Pos" {
+                        sentimentScore += 1
+                    } else if sentiment == "Neg" {
+                        sentimentScore -= 1
+                    }
+                }
+                print(sentimentScore)
+                
+            } catch {
+                print("There was an error with making a prediction \(error)")
+            }
+            
+            
         } failure: { (error) in
             print("Error with Twitter API request, \(error)")
         }
-
+        
     }
 
     
