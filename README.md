@@ -1,5 +1,8 @@
 # Tweets-Analysis
 
+<img src="https://github.com/elina-mns/Tweets-Analysis/blob/main/Tweets%20Analysis/Assets.xcassets/AppIcon.appiconset/180.png"
+align="right"/>
+
 Prediction of a sentiment based on Tweeter's posts.
 A user can search using hashtags or @nameOfCompany and check the results on how people feel about this company 
 or what sentiment is associated with this hashtag from Tweeter.
