@@ -15,7 +15,7 @@ or what sentiment is associated with this hashtag from Tweeter.
 * Usage of Swifter framework to search inside the collection of tweets with specified parameters
 * Fetch tweets with SwiftyJSON framework 
 * Calculate a score based on the amount of positive and negative tweets on a particular topic 
-* Update a UI with emojies = reactions 
+* Update UI with emojies = reactions 
 
 <img src="https://github.com/elina-mns/Tweets-Analysis/blob/main/Tweets%20Analysis/Assets.xcassets/1.png"
 width=300, height=600,
