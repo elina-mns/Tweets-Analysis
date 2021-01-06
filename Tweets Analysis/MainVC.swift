@@ -60,7 +60,8 @@ class MainVC: UIViewController {
         textField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
         textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        swifter.searchTweet(using: "@Spotify", count: 100) { (results, metadata) in
+        //returns a collection of tweets with a specified parameter
+        swifter.searchTweet(using: "@Spotify", lang: "en", count: 100, tweetMode: .extended) { (results, metadata) in
             print(results)
         } failure: { (error) in
             print("Error with Twitter API request, \(error)")
