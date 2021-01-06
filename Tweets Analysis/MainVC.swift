@@ -12,6 +12,7 @@ class MainVC: UIViewController {
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textAlignment = .center
         textField.placeholder = "How do people feel about..."
         textField.backgroundColor = .white
         return textField
@@ -54,8 +55,8 @@ class MainVC: UIViewController {
         stackView.addArrangedSubview(predictButton)
         
         sentiment.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6).isActive = true
-        textField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
-        textField.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1).isActive = true
+        textField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
+        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 
 
