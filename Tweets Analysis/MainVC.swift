@@ -27,7 +27,7 @@ class MainVC: UIViewController {
     lazy var sentiment: UILabel = {
         let label = UILabel()
         label.text = "🤔"
-        label.font = UIFont.systemFont(ofSize: 70)
+        label.font = UIFont.systemFont(ofSize: 100)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -59,6 +59,9 @@ class MainVC: UIViewController {
         textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 
-
+    
+    func predictIsTapped() {
+        predictButton.sendActions(for: .touchUpInside)
+    }
 }
 
