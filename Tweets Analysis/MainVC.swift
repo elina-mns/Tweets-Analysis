@@ -25,6 +25,7 @@ class MainVC: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .black
         button.setTitle("PREDICT", for: .normal)
+        button.addTarget(self, action: #selector(predictIsTapped), for: .touchUpInside)
         return button
     }()
     lazy var sentiment: UILabel = {
@@ -63,47 +64,61 @@ class MainVC: UIViewController {
         sentiment.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6).isActive = true
         textField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
         textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        //returns a collection of tweets with a specified parameter
-        swifter.searchTweet(using: "@Dior", lang: "en", count: 100, tweetMode: .extended) { (results, metadata) in
-            var tweets = [TweetAnalysisInput]()
-            
-            //adding tweets on a specified parameter to an array
-            for i in 0..<100 {
-                if let tweet = results[i]["full_text"].string {
-                    let tweetForClassification = TweetAnalysisInput(text: tweet)
-                    tweets.append(tweetForClassification)
-                }
-            }
-            
-            //calculation of tweets' score
-            do {
-                let predictions = try self.sentimentClassifier.predictions(inputs: tweets)
-                var sentimentScore = 0
-                for prediction in predictions {
-                    let sentiment = prediction.label
-                    if sentiment == "Pos" {
-                        sentimentScore += 1
-                    } else if sentiment == "Neg" {
-                        sentimentScore -= 1
-                    }
-                }
-                print(sentimentScore)
-                
-            } catch {
-                print("There was an error with making a prediction \(error)")
-            }
-            
-            
-        } failure: { (error) in
-            print("Error with Twitter API request, \(error)")
-        }
-        
     }
 
-    
+    @objc
     func predictIsTapped() {
-        predictButton.sendActions(for: .touchUpInside)
+        if let searchText = textField.text, !searchText.isEmpty {
+            //returns a collection of tweets with a specified parameter
+            swifter.searchTweet(using: searchText, lang: "en", count: 100, tweetMode: .extended) { (results, metadata) in
+                var tweets = [TweetAnalysisInput]()
+                
+                //adding tweets on a specified parameter to an array
+                for i in 0..<100 {
+                    if let tweet = results[i]["full_text"].string {
+                        let tweetForClassification = TweetAnalysisInput(text: tweet)
+                        tweets.append(tweetForClassification)
+                    }
+                }
+                
+                //calculation of tweets' score
+                do {
+                    let predictions = try self.sentimentClassifier.predictions(inputs: tweets)
+                    var sentimentScore = 0
+                    for prediction in predictions {
+                        let sentiment = prediction.label
+                        if sentiment == "Pos" {
+                            sentimentScore += 1
+                        } else if sentiment == "Neg" {
+                            sentimentScore -= 1
+                        }
+                    }
+                    
+                    if sentimentScore > 20 {
+                        self.sentiment.text = "😍"
+                    } else if sentimentScore > 10 {
+                        self.sentiment.text = "☺️"
+                    } else if sentimentScore > 0 {
+                        self.sentiment.text = "🙂"
+                    } else if sentimentScore == 0 {
+                        self.sentiment.text = "🤨"
+                    } else if sentimentScore > -10 {
+                        self.sentiment.text = "😤"
+                    } else if sentimentScore > -20 {
+                        self.sentiment.text = "🤬"
+                    } else {
+                        self.sentiment.text = "🤮"
+                    }
+                    
+                } catch {
+                    print("There was an error with making a prediction \(error)")
+                }
+                
+                
+            } failure: { (error) in
+                print("Error with Twitter API request, \(error)")
+            }
+        }
     }
 }
 
