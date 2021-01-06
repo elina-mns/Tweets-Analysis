@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwifteriOS
 
 class MainVC: UIViewController {
     
@@ -39,7 +40,8 @@ class MainVC: UIViewController {
         return stackView
     }()
     
-
+    let swifter = Swifter(consumerKey: "LTReJyreyyuz4SWjVABuA1WKI", consumerSecret: "ajf107xfd6869heCG8Ptn8iztfFHBWPIxLkFGvsmoEwI7MKZcz")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .purple
@@ -57,6 +59,13 @@ class MainVC: UIViewController {
         sentiment.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6).isActive = true
         textField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
         textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        swifter.searchTweet(using: "@Spotify", count: 100) { (results, metadata) in
+            print(results)
+        } failure: { (error) in
+            print("Error with Twitter API request, \(error)")
+        }
+
     }
 
     
