@@ -68,7 +68,8 @@ class MainVC: UIViewController {
 
     @objc
     func predictIsTapped() {
-       fetchTweets()
+        fetchTweets()
+        createSpinnerView()
     }
     
     func fetchTweets() {
@@ -129,6 +130,24 @@ class MainVC: UIViewController {
             self.sentiment.text = "🤮"
         }
         
+    }
+    
+    func createSpinnerView() {
+        let activityIcon = ActivityIndicator()
+
+        // add the spinner to view controller
+        addChild(activityIcon)
+        activityIcon.view.frame = view.frame
+        view.addSubview(activityIcon.view)
+        activityIcon.didMove(toParent: self)
+
+        // wait two seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            // then remove the spinner view controller
+            activityIcon.willMove(toParent: nil)
+            activityIcon.view.removeFromSuperview()
+            activityIcon.removeFromParent()
+        }
     }
 }
 
